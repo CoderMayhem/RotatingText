@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.rotatingtext.models;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Typeface;
 import android.view.animation.Interpolator;
@@ -19,6 +20,9 @@ public class Rotatable {
     private int animationDuration = 1000;
     private int currentWordNumber;
 
+    private Integer[] color_array={Color.BLACK};
+    private boolean useArray = false;
+
     private float size = 24.0f;
     private int strokeWidth = -1;
 
@@ -34,6 +38,9 @@ public class Rotatable {
 
     private int FPS = 60;
 
+    private int nCycles = 0, countCycles = 0;
+    private String initialWord = "";
+
     public Rotatable(int updateDuration, String... text) {
         this.updateDuration = updateDuration;
         this.text = text;
@@ -47,13 +54,57 @@ public class Rotatable {
         currentWordNumber = -1;
     }
 
+    public Rotatable(Integer[] color_array, int updateDuration, String... text) {
+        this.color_array = color_array;
+        this.updateDuration = updateDuration;
+        this.text = text;
+        currentWordNumber = -1;
+        useArray = true;
+    }
+
     public int getColor() {
         return color;
+    }
+
+    public boolean useArray() {
+        return useArray;
+    }
+
+    public int getColorFromArray(int pos) {
+        return color_array[pos];
+    }
+
+    public int colorArraySize() {
+        return color_array.length;
     }
 
     public void setColor(int color) {
         this.color = color;
         setUpdated(true);
+    }
+
+    public int countCycles(boolean bool) {
+        if(bool) {
+            countCycles = countCycles + 1;
+        }
+        return countCycles;
+    }
+
+    public void setCycles(int val) {
+        this.nCycles = val;
+        countCycles = 0;
+    }
+
+    public int getCycles() {
+        return nCycles;
+    }
+
+    public void setInitialWord(String initialWord) {
+        this.initialWord = initialWord;
+    }
+
+    public String getInitialWord() {
+        return initialWord;
     }
 
     public String[] getText() {
@@ -160,6 +211,8 @@ public class Rotatable {
     public String getCurrentWord() {
         return text[currentWordNumber];
     }
+
+    public int getCurrentWordNumber() { return currentWordNumber; }
 
     public String getPreviousWord() {
         if (currentWordNumber <= 0)
